@@ -1,0 +1,19 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Learn Vue PWA",
+      "completed": true
+    },
+    {
+      "id": "2",
+      "title": "Build First App",
+      "completed": false
+    },
+    {
+      "id": "b472",
+      "title": "hi",
+      "completed": false
+    }
+  ]
+}

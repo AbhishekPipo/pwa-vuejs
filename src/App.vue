@@ -1,29 +1,68 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div id="app">
+    <header class="header">
+      <h1>Task Manager PWA</h1>
+      <div v-if="deferredPrompt" class="install-prompt">
+        <button @click="installPWA" class="install-button">Install App</button>
+      </div>
+    </header>
+    <router-view/>
+  </div>
 </template>
+
+<script>
+export default {
+  name: 'App',
+  data() {
+    return {
+      deferredPrompt: null
+    }
+  },
+  mounted() {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault()
+      this.deferredPrompt = e
+    })
+  },
+  methods: {
+    async installPWA() {
+      if (!this.deferredPrompt) return
+      this.deferredPrompt.prompt()
+      const choiceResult = await this.deferredPrompt.userChoice
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt')
+      }
+      this.deferredPrompt = null
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
 }
 
-nav {
-  padding: 30px;
+.header {
+  background-color: #4DBA87;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+  .install-button {
+    background-color: white;
+    color: #4DBA87;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
 
-    &.router-link-exact-active {
-      color: #42b983;
+    &:hover {
+      background-color: darken(white, 5%);
     }
   }
 }
